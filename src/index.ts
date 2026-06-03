@@ -6,6 +6,10 @@ export const PlaywrightMCP = createMcpAgent(env.BROWSER);
 
 export default {
   fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    const auth = request.headers.get('authorization');
+    if (auth !== `Bearer ${env.MCP_TOKEN}`) {
+      return new Response('Unauthorized', { status: 401 });
+    }
     const { pathname }  = new URL(request.url);
 
     switch (pathname) {
